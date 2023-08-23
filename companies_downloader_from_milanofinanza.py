@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import csv
 
 url = "https://www.milanofinanza.it/quotazioni/ricerca/aggregazione-238-mf-italy-azioni-ordinarie"
+filename = "companies.csv"
+
 response = requests.get(url)
 
 if response.status_code == 200:
@@ -21,7 +23,7 @@ if response.status_code == 200:
                 data.append([company_name, codice_isin])
 
         # Save data to CSV file
-        with open("companies.csv", "w", newline="") as csvfile:
+        with open(filename, "w", newline="") as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(["Company Name", "Codice ISIN"])  # Write header
             csvwriter.writerows(data)  # Write data rows
