@@ -19,15 +19,27 @@ The companies are ordered according to the following parameters:
 
 ### Installing
 
-* Install Python 3 from the official site: https://www.python.org/downloads/
-* Install Pandas library
+* Install Python moduls nedeed
 
 ```
-pip install pandas
+pip install -r requirements.txt
 ```
 
 ### Executing program
 
+* Run companies downloader script
+
+You can choose different platforms from which download companies data:
+- Milano Finanza
+- Il Sole 24 Ore
+
+ Based on that, you can run the proper script:
+```
+python companies_downloader_from_sole24ore.py
+```
+```
+python companies_downloader_from_milanofinanza.py
+```
 * Run downloader script
  
 ```
