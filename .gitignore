@@ -1,0 +1,8 @@
+.git
+.vagrant
+.bash_profile
+.nvm
+.vscode
+
+# Files
+companies.csv
