@@ -1,4 +1,4 @@
-# Dividend Analyzer TBD
+# Dividend Analyzer
 
 The idea for the project stems from the lack of a valid and convenient tool for analysing the dividends of Italian companies listed on the Italian Stock Exchange, in particular those belonging to the FTSE All Share index.
 
