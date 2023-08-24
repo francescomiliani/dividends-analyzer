@@ -15,7 +15,7 @@ if not os.path.exists(output_folder):
 output_folder = 'dataset'
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
-    
+
 def compute_dividend_yield_info(company):
     # STEP 1 - Get dividends series data
     series = company.actions.Dividends
@@ -67,8 +67,11 @@ def download(_company):
 
     try:
         ticker = _company['Ticker']
+
         start = time.time()
         company = yf.Ticker(ticker)
+        isin = ticker
+        ticker = company.info["symbol"]
         # STEP 1 - Save series in a file, to speed up the analysis
         series = company.actions.Dividends
         series.to_csv('dataset/' + ticker + '.csv')
@@ -91,6 +94,7 @@ def download(_company):
             "Company": company.info["longName"] if "longName" not in company.info else _company["Company"],
             "ISIN": _company['Ticker'],
             "Ticker": company.info["symbol"],
+            "Sector": company.info["sector"],
             "currency": company.info["currency"],
             "currentPrice": company.info["currentPrice"],
             "dividendRate": company.info["dividendRate"] if (
@@ -106,7 +110,7 @@ def download(_company):
         # and release() will be called when the block is exited.
         with threadLock:
             # STEP 3 - Append the current downloaded company info into a common file
-            with open('output/companies_info_threading.csv', mode='a', encoding='UTF8', newline='') as csv_file:
+            with open('output/companies_info.csv', mode='a', encoding='UTF8', newline='') as csv_file:
                 fieldnames = company_info_fieldnames
                 writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                 writer.writerow(company_info)
@@ -115,6 +119,7 @@ def download(_company):
         print(f'Company: {ticker} downloaded successfully in {(end - start):.2f} seconds !')
         i += 1
     except Exception as e:
+        i += 1
         with companies_failed_lock:
             failed_companies.append(ticker)
 
@@ -130,14 +135,14 @@ with open('companies.csv', mode='r') as csv_file:
         if line_count == 0:
             # print(f'Column names are {", ".join(row)}')
             line_count += 1
-        # print(f'\tCompany: {row["Company"]} - Ticker: {row["Ticker"]}.')
+        print(f'\tCompany: {row["Company"]} - Ticker: {row["Ticker"]}.')
         company_array.append(row)
         line_count += 1
-    # print(f'Processed {line_count} lines.')
+    print(f'Processed {line_count} lines.')
 
-company_info_fieldnames = ['Company', 'ISIN', 'Ticker', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
+company_info_fieldnames = ['Company', 'ISIN', 'Ticker', 'Sector', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
                            'firstDividendDate', 'lastDividendDate', 'lastDividendValue', 'lastPriceWithDividend']
-with open('output/companies_info_threading.csv', mode='w', newline='') as csv_file:
+with open('output/companies_info.csv', mode='w', newline='') as csv_file:
     fieldnames = company_info_fieldnames
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     writer.writeheader()
@@ -155,3 +160,11 @@ print(f'Errors: {len(failed_companies)} / {len(company_array)}')
 finish = time.perf_counter()
 print(f'Total download finished in {round(finish - start, 2)} seconds')
 print('companies_info.csv has been written successfully!')
+
+print('failed_companies:', failed_companies)
+with open('output/failed_companies.csv', 'w', newline='') as csv_file:
+    csv_writer = csv.writer(csv_file)
+    csv_writer.writerow(['Ticker'])  # Writing the header
+    for element in failed_companies:
+        csv_writer.writerow([element])  # Writing each element
+print('failed_companies.csv has been written successfully!')

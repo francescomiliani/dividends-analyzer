@@ -18,7 +18,8 @@ def analyze(_company):
     with open('dataset/' + _company["Ticker"] + '.csv', mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
-            current_year = datetime.strptime(row["Date"], "%Y-%m-%d").year
+            input_date = datetime.strptime(row["Date"], '%Y-%m-%d %H:%M:%S%z')
+            current_year = input_date.year
             # Skip the current year because not all companies have yet detached the dividend in the current year
             if current_year == datetime.now().year:
                 break
@@ -50,9 +51,12 @@ def analyze(_company):
             dividend_yield = float(company_info["lastDividendValue"])/float(company_info["lastPriceWithDividend"]) * 100
         # else: dividend_yield = 0 but it's already set to 0
 
+    yieldRatio = (yield_counter / year_time_period * 100) if (year_time_period > 0 ) else 0
+
+
     _company["longestYieldStrike"] = longest_yield_strike
     _company["yieldCounter"] = yield_counter
-    _company["yieldRatio"] = yield_counter / year_time_period * 100
+    _company["yieldRatio"] = yieldRatio
     _company["yearTimePeriod"] = year_time_period
     _company["currentPrice"] = float(company_info["currentPrice"])
     _company["currency"] = company_info["currency"]
@@ -90,13 +94,15 @@ for i in range(len(company_array)):
     except Exception as e:
         print(e)
 
+# ==============================================================================
+# ==============================================================================
+
 # yieldRatio and yearTimePeriod in reverse order
 # currentPrice in natural order
-ordered_list = sorted(company_array, key=lambda d: (d["yieldRatio"], d["yearTimePeriod"], d["dividendYield"],
-                                                    -d["currentPrice"]), reverse=True)
+ordered_list = sorted(company_array, key=lambda d: ( d["yieldRatio"], d["yearTimePeriod"], d["dividendYield"], -d["currentPrice"]), reverse=True)
 
 with open('output/analysis.csv', mode='w', newline='') as csv_file:
-    fieldnames = ['Company', 'Ticker', 'Sector', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
+    fieldnames = ['Company', 'ISIN', 'Ticker', 'Sector', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
                   'dividendYieldAPI', 'longestYieldStrike', 'yearTimePeriod', 'yieldCounter', 'yieldRatio',
                   'firstDividendDate', 'lastDividendDate', 'lastDividendValue', 'lastPriceWithDividend']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -104,8 +110,8 @@ with open('output/analysis.csv', mode='w', newline='') as csv_file:
     writer.writerows(ordered_list)
 
 print(f'analysis.csv file has been written successfully!')
-
 print(f'Let\'s show the first 10 companies')
+
 counter = 10
 top_companies_ordered_list = ordered_list[0:counter - 1]
 for e in top_companies_ordered_list:
