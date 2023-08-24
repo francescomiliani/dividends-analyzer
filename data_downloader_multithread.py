@@ -71,7 +71,7 @@ def download(_company):
         company = yf.Ticker(ticker)
         # STEP 1 - Save series in a file, to speed up the analysis
         series = company.actions.Dividends
-        # series.to_csv('dataset/' + ticker + '.csv')
+        series.to_csv('dataset/' + ticker + '.csv')
 
         # STEP 2 - Compute the dividend yield info
         # STEP 2 A - Compute last_dividend_value and last_price_with_dividend
