@@ -31,7 +31,9 @@ while True:
 
 if all_data:
     combined_data = pd.concat(all_data, ignore_index=True)
-    combined_data.rename(columns={'Nome': 'Company','Categoria': 'Sector',
+    combined_data.rename(columns={'Nome': 'Company',
+                                  'ISIN': 'Ticker',
+                                  'Categoria': 'Sector',
                                }, inplace=True)
     combined_data.to_csv(filename, index=False)
 
