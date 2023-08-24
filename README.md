@@ -35,10 +35,14 @@ pip install -r requirements.txt
 * Run companies downloader script
 
 You can choose different platforms from which download companies data:
+- Borsa Italiana
 - Milano Finanza
 - Il Sole 24 Ore
 
- Based on that, you can run the proper script, which will produce a file .csv called *companies.csv*:
+Based on that, you can run the proper script, which will produce a file .csv called *companies.csv*:
+```
+python companies_downloader_from_borsaitaliana.py
+```
 ```
 python companies_downloader_from_sole24ore.py
 ```
@@ -65,6 +69,10 @@ Francesco Miliani
 
 ## Version History
 
+* 0.4
+    * Add borsa italiana companies downloaders
+    * See [commit change]() or See [release history]()
+      
 * 0.3
     * Add companies downloaders
     * See [commit change]() or See [release history]()
