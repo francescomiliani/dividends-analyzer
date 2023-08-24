@@ -74,6 +74,17 @@ def download(_company):
         ticker = company.info["symbol"]
         # STEP 1 - Save series in a file, to speed up the analysis
         series = company.actions.Dividends
+
+        # Filter and modify the series
+        filtered_series_before_2002 = series[series.index.year < 2002]
+        filtered_series_before_2002 = filtered_series_before_2002.apply(lambda x: x / 1936.27)
+
+        filtered_series_after_2002 = series[series.index.year >= 2002]
+        # Concatenate the filtered series
+        merged_series = pd.concat([filtered_series_before_2002, filtered_series_after_2002])
+        # Assuming you want to store the merged series back into the 'Dividends' column
+        # of the original DataFrame (assuming it's a DataFrame)
+        series = merged_series
         series.to_csv('dataset/' + ticker + '.csv')
 
         # STEP 2 - Compute the dividend yield info
@@ -103,7 +114,7 @@ def download(_company):
             "firstDividendDate": datetime.strftime(series.index[0], "%Y-%m-%d"),
             "lastDividendDate": datetime.strftime(series.index[-1], "%Y-%m-%d"),
             "lastDividendValue": last_dividend_value,
-            "lastPriceWithDividend": last_price_with_dividend
+            "lastPriceWithDividend": round( last_price_with_dividend, 3)
         }
 
         # The acquire() method will be called when the block is entered,
@@ -114,13 +125,14 @@ def download(_company):
                 fieldnames = company_info_fieldnames
                 writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                 writer.writerow(company_info)
-        end = time.time()
-        print(f'{i + 1}/{len(company_array)} Company: {ticker} downloaded successfully in {(end - start):.2f} seconds !')
-        print(f'Company: {ticker} downloaded successfully in {(end - start):.2f} seconds !')
-        i += 1
+            end = time.time()
+            print(f'{i + 1}/{len(company_array)} Company: {ticker} downloaded successfully in {(end - start):.2f} seconds !')
+            print(f'Company: {ticker} downloaded successfully in {(end - start):.2f} seconds !')
+            i += 1
+            
     except Exception as e:
-        i += 1
         with companies_failed_lock:
+            i += 1
             failed_companies.append(ticker)
 
 
@@ -140,8 +152,10 @@ with open('companies.csv', mode='r') as csv_file:
         line_count += 1
     print(f'Processed {line_count} lines.')
 
-company_info_fieldnames = ['Company', 'ISIN', 'Ticker', 'Sector', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
-                           'firstDividendDate', 'lastDividendDate', 'lastDividendValue', 'lastPriceWithDividend']
+company_info_fieldnames = ['Company', 'ISIN', 'Ticker', 'Sector', 'currency', 
+                           'currentPrice', 'dividendRate', 'dividendYield',
+                           'firstDividendDate', 'lastDividendDate', 
+                           'lastDividendValue', 'lastPriceWithDividend']
 with open('output/companies_info.csv', mode='w', newline='') as csv_file:
     fieldnames = company_info_fieldnames
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -149,8 +163,8 @@ with open('output/companies_info.csv', mode='w', newline='') as csv_file:
 
 i = 0
 failed_companies = []
-threadLock = threading.Lock()
-companies_failed_lock = threading.Lock()
+threadLock = threading.Lock() # create a Lock
+companies_failed_lock = threading.Lock() # create a Lock
 
 start = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
