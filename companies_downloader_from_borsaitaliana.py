@@ -46,7 +46,7 @@ while True:
 if all_data:
     with open(filename, "w", newline="") as csvfile:
         csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(["Nome", "ISIN"])  # Write header
+        csvwriter.writerow(["Company", "Ticker"])  # Write header
         csvwriter.writerows(all_data)  # Write data rows
     print("Data saved to companies.csv")
 else:

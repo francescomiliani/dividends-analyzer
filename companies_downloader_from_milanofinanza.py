@@ -25,7 +25,7 @@ if response.status_code == 200:
         # Save data to CSV file
         with open(filename, "w", newline="") as csvfile:
             csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(["Company Name", "Codice ISIN"])  # Write header
+            csvwriter.writerow(["Company", "Ticker"])  # Write header
             csvwriter.writerows(data)  # Write data rows
 
         print("Data saved to companies.csv")

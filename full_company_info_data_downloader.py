@@ -1,6 +1,12 @@
 import yfinance as yf
 import csv
 import time
+import os  # Import the os module for folder handling
+
+# Check if the "output" folder exists and create it if not
+output_folder = 'output'
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
 
 company_array = []
 with open('companies.csv', mode='r') as csv_file:
@@ -16,13 +22,14 @@ companies_failed = []
 init = True
 for i in range(len(company_array)):
     ticker = company_array[i]["Ticker"]
+    print(ticker)
     start = time.time()
     try:
         company = yf.Ticker(ticker)
+        company.info['ISIN'] = ticker
         if init:
             init = False
             with open('output/companies_full_info.csv', mode='w', newline='') as csv_file:
-                fieldnames = company.info.keys()
                 writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                 writer.writeheader()
         # STEP 3 - Append the current downloaded company info into a common file

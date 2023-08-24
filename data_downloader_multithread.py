@@ -5,8 +5,17 @@ from datetime import datetime, timedelta
 import time
 import threading
 import concurrent.futures
+import os  # Import the os module for folder handling
 
-
+# Check if the "output" folder exists and create it if not
+output_folder = 'output'
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+# Check if the "dataset" folder exists and create it if not
+output_folder = 'dataset'
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+    
 def compute_dividend_yield_info(company):
     # STEP 1 - Get dividends series data
     series = company.actions.Dividends
@@ -80,6 +89,7 @@ def download(_company):
         # STEP 2 D - Collect company info
         company_info = {
             "Company": company.info["longName"] if "longName" not in company.info else _company["Company"],
+            "ISIN": _company['Ticker'],
             "Ticker": company.info["symbol"],
             "currency": company.info["currency"],
             "currentPrice": company.info["currentPrice"],
@@ -125,7 +135,7 @@ with open('companies.csv', mode='r') as csv_file:
         line_count += 1
     # print(f'Processed {line_count} lines.')
 
-company_info_fieldnames = ['Company', 'Ticker', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
+company_info_fieldnames = ['Company', 'ISIN', 'Ticker', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
                            'firstDividendDate', 'lastDividendDate', 'lastDividendValue', 'lastPriceWithDividend']
 with open('output/companies_info_threading.csv', mode='w', newline='') as csv_file:
     fieldnames = company_info_fieldnames

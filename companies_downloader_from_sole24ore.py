@@ -10,7 +10,7 @@ def scrape_page(url):
         dfs = pd.read_html(response.text)  # Parse HTML tables using pandas
         if dfs:
             df = dfs[0]
-            df = df[["Nome", "ISIN", "Categoria"]]  # Extract specific columns
+            df = df[["Company", "Ticker", "Categoria"]]  # Extract specific columns
             return df
         else:
             print("Table not found on the page.")

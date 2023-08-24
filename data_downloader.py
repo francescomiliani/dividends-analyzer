@@ -5,7 +5,16 @@ from datetime import datetime, timedelta
 import time
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
+import os  # Import the os module for folder handling
 
+# Check if the "output" folder exists and create it if not
+output_folder = 'output'
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+# Check if the "dataset" folder exists and create it if not
+output_folder = 'dataset'
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
 
 def get_dividend_yield_from_html(ticker):
     url = 'https://finance.yahoo.com/quote/' + ticker
@@ -83,7 +92,7 @@ with open('companies.csv', mode='r') as csv_file:
     # print(f'Processed {line_count} lines.')
 
 companies_info_list = []
-company_info_fieldnames = ['Company', 'Ticker', 'Sector', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
+company_info_fieldnames = ['Company', 'ISIN', 'Ticker', 'Sector', 'currency', 'currentPrice', 'dividendRate', 'dividendYield',
                            'firstDividendDate', 'lastDividendDate', 'lastDividendValue', 'lastPriceWithDividend']
 with open('output/companies_info.csv', mode='w', newline='') as csv_file:
     fieldnames = company_info_fieldnames
@@ -96,6 +105,9 @@ for i in range(len(company_array)):
     start = time.time()
     try:
         company = yf.Ticker(ticker)
+        isin = ticker
+        ticker = company.info['symbol']
+
         # STEP 1 - Save series in a file, to speed up the analysis
         series = company.actions.Dividends
         series.to_csv('dataset/' + ticker + '.csv')
@@ -121,6 +133,7 @@ for i in range(len(company_array)):
         # STEP 2 D - Collect company info
         company_info = {
             "Company": company.info["longName"] if "longName" not in company.info else company_array[i]["Company"],
+            "ISIN": company_array[i]['Ticker'],
             "Ticker": company.info["symbol"],
             "Sector": company.info["sector"] if "sector" not in company.info else company_array[i]["Sector"],
             "currency": company.info["currency"],
