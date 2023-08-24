@@ -24,7 +24,7 @@ The companies are ordered according to the following parameters:
 
 ### Installing
 
-* Install Python moduls nedeed
+* Install Python modules nedeed
 
 ```
 pip install -r requirements.txt
