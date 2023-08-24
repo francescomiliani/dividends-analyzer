@@ -10,7 +10,7 @@ def scrape_page(url):
         dfs = pd.read_html(response.text)  # Parse HTML tables using pandas
         if dfs:
             df = dfs[0]
-            df = df[["Company", "Ticker", "Categoria"]]  # Extract specific columns
+            df = df[["Nome", "ISIN", "Categoria"]]  # Extract specific columns            
             return df
         else:
             print("Table not found on the page.")
@@ -31,7 +31,11 @@ while True:
 
 if all_data:
     combined_data = pd.concat(all_data, ignore_index=True)
+    combined_data.rename(columns={'Nome': 'Company','Categoria': 'Sector',
+                               }, inplace=True)
     combined_data.to_csv(filename, index=False)
+
+    print(combined_data)
     print("Data saved to " + filename)
 else:
     print("No data found.")
