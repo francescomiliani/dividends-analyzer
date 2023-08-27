@@ -1,6 +1,7 @@
 import yfinance as yf
 import csv
 import math
+import pandas as pd
 from datetime import datetime, timedelta
 import time
 import threading
@@ -70,21 +71,23 @@ def download(_company):
 
         start = time.time()
         company = yf.Ticker(ticker)
-        isin = ticker
         ticker = company.info["symbol"]
         # STEP 1 - Save series in a file, to speed up the analysis
         series = company.actions.Dividends
 
-        # Filter and modify the series
-        filtered_series_before_2002 = series[series.index.year < 2002]
-        filtered_series_before_2002 = filtered_series_before_2002.apply(lambda x: x / 1936.27)
+        ## Enable only for data coming from Borsa italiana
+        # # Filter and modify the series
+        # filtered_series_before_2002 = series[series.index.year < 2002]
+        # filtered_series_before_2002 = filtered_series_before_2002.apply(lambda x: x / 1936.27)
 
-        filtered_series_after_2002 = series[series.index.year >= 2002]
-        # Concatenate the filtered series
-        merged_series = pd.concat([filtered_series_before_2002, filtered_series_after_2002])
-        # Assuming you want to store the merged series back into the 'Dividends' column
-        # of the original DataFrame (assuming it's a DataFrame)
-        series = merged_series
+        # filtered_series_after_2002 = series[series.index.year >= 2002]
+        # # Concatenate the filtered series
+        # merged_series = pd.concat([filtered_series_before_2002, filtered_series_after_2002])
+        # # Assuming you want to store the merged series back into the 'Dividends' column
+        # # of the original DataFrame (assuming it's a DataFrame)
+        # series = merged_series
+
+        
         series.to_csv('dataset/' + ticker + '.csv')
 
         # STEP 2 - Compute the dividend yield info
