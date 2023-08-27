@@ -10,7 +10,7 @@ The project essentially contains main scripts:
 - companies_downloader_from_borsaitaliana.py: script downloading all companies by extracting data from the site borsaitaliana.it and create a file to store them.
 - companies_downloader_from_milanofinanza.py: script downloading all companies by extracting data from the site milanofinanza.it and create a file to store them.
 - companies_downloader_from_sole24ore.py: script downloading all companies by extracting data from the site ilsole24ore.it and create a file to store them.
-- companies_downloader_from_borseeuropee_zurigo.py: script downloading all companies by extracting data from the site ilsole24ore.it and "Borsa di Zurigo" and create a file to store them.
+- companies_downloader_from_borsazurigo.py: script downloading all companies by extracting data from the site ilsole24ore.it and "Borsa di Zurigo" and create a file to store them.
 - companies_downloader_from_londonstockexchange.py: script downloading all companies by extracting data from the site londonstockexchange.com and create a file to store them.
 - data_downloader_multithread.py: a script that downloads data from Yahoo Finance via the yfinance library (https://github.com/ranaroussi/yfinance), storing them in .csv files in the dataset folder and creating a convenience file containing the most useful information for each company;
 - analyzer.py: script that analyses the previously stored files, producing an analysis file in .csv and .xslx format as output
@@ -67,6 +67,8 @@ You can choose different platforms from which download companies data:
 - Borsa Italiana
 - Milano Finanza
 - Il Sole 24 Ore
+- Swiss Exchange (SIX)
+- London Stock Exchange (LSE) 
 
 Based on that, you can run the proper script, which will produce a file .csv called *companies.csv*:
 ```
@@ -78,10 +80,23 @@ python companies_downloader_from_sole24ore.py
 ```
 python companies_downloader_from_milanofinanza.py
 ```
-* Run downloader script
- 
 ```
-python data_downloader.py
+python companies_downloader_from_swissexchange.py
+```
+```
+python companies_downloader_from_londonstockexchange.py
+```
+* Run downloader script
+Remove the comment from filename related to the file just created with data tickers from the section, within the file **data_downloader_multithread.py**.
+```
+# The file containing the list of companies to download
+filename = 'companies.csv' # Default value
+# filename = 'companies_from_borsaitaliana.csv'
+# filename = 'companies_from_borsazurigo.csv' 
+# filename = 'companies_from_londonstockexchange.csv' 
+```
+```
+python data_downloader_multithread.py
 ```
 * Run the analyzer script
  
