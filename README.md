@@ -97,6 +97,10 @@ Francesco Miliani
 
 ## Version History
 
+0.5
+    * Add SIX Suiss Stock Exchange companies downloaders
+    * See [commit change]() or See [release history]()
+      
 * 0.4
     * Add borsa italiana companies downloaders
     * See [commit change]() or See [release history]()
