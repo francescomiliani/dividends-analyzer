@@ -7,6 +7,14 @@ import time
 import threading
 import concurrent.futures
 import os  # Import the os module for folder handling
+import random
+from time import sleep
+
+# The file containing the list of companies to download
+filename = 'companies.csv' # Default value
+# filename = 'companies_from_borsaitaliana.csv'
+# filename = 'companies_from_swissexchange.csv' 
+# filename = 'companies_from_londonstockexchange.csv' 
 
 # Check if the "output" folder exists and create it if not
 output_folder = 'output'
@@ -67,6 +75,7 @@ def download(_company):
     global i
 
     try:
+        sleep( random.randint(1, 5) ) # Sleep for a random number of seconds to avoid being blocked by the server
         ticker = _company['Ticker']
 
         start = time.time()
@@ -75,17 +84,18 @@ def download(_company):
         # STEP 1 - Save series in a file, to speed up the analysis
         series = company.actions.Dividends
 
-        ## Enable only for data coming from Borsa italiana
-        # # Filter and modify the series
-        # filtered_series_before_2002 = series[series.index.year < 2002]
-        # filtered_series_before_2002 = filtered_series_before_2002.apply(lambda x: x / 1936.27)
+        if ('borsaitaliana' in filename) or ( 'companies.csv' in filename ):
+            # Enable only for data coming from Borsa italiana
+            # Filter and modify the series
+            filtered_series_before_2002 = series[series.index.year < 2002]
+            filtered_series_before_2002 = filtered_series_before_2002.apply(lambda x: x / 1936.27)
 
-        # filtered_series_after_2002 = series[series.index.year >= 2002]
-        # # Concatenate the filtered series
-        # merged_series = pd.concat([filtered_series_before_2002, filtered_series_after_2002])
-        # # Assuming you want to store the merged series back into the 'Dividends' column
-        # # of the original DataFrame (assuming it's a DataFrame)
-        # series = merged_series
+            filtered_series_after_2002 = series[series.index.year >= 2002]
+            # Concatenate the filtered series
+            merged_series = pd.concat([filtered_series_before_2002, filtered_series_after_2002])
+            # Assuming you want to store the merged series back into the 'Dividends' column
+            # of the original DataFrame (assuming it's a DataFrame)
+            series = merged_series
 
         
         series.to_csv('dataset/' + ticker + '.csv')
@@ -143,7 +153,7 @@ def download(_company):
 #####################################################################################
 
 company_array = []
-with open('companies.csv', mode='r') as csv_file:
+with open(filename, mode='r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     line_count = 0
     for row in csv_reader:
