@@ -38,7 +38,10 @@ Other information about fields:
 - **avgDivided**: average dividend paid.
 - **stdDivided**: standard deviation of dividend paid.
 - **currency**: currency of the dividend and the price.
-
+- **isAchievers**: true if the company paid a dividend equal or higher during last **10 years**.
+- **isAristocrats**: true if the company paid a dividend equal or higher during last **25 years**.
+- **isKings**: true if the company paid a dividend equal or higher during last **50 years**.
+ 
 **P.S. dividend with release date lower than year 2002 (€ begining date...) are converted from Lira italiana to €.**
 
 ### Final considerations
