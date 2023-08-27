@@ -1,6 +1,6 @@
 # Dividend Analyzer
 
-The idea for the project stems from the lack of a valid and convenient tool for analysing the dividends of Italian companies listed on the Italian Stock Exchange, in particular those belonging to the FTSE All Share index.
+The idea for the project stems from the lack of a valid and convenient tool for analysing the dividends of Italian companies listed on the Italian Stock Exchange, in particular those belonging to the FTSE All Share index, and recently with the LSE and SIX.
 
 The goal is to analyse a list of dividend-paying companies in order to choose the best, most profitable ones on the basis of certain parameters such as dividend yield or yield ratio.
 
@@ -10,7 +10,7 @@ The project essentially contains main scripts:
 - companies_downloader_from_borsaitaliana.py: script downloading all companies by extracting data from the site borsaitaliana.it and create a file to store them.
 - companies_downloader_from_milanofinanza.py: script downloading all companies by extracting data from the site milanofinanza.it and create a file to store them.
 - companies_downloader_from_sole24ore.py: script downloading all companies by extracting data from the site ilsole24ore.it and create a file to store them.
-- companies_downloader_from_borsazurigo.py: script downloading all companies by extracting data from the site ilsole24ore.it and "Borsa di Zurigo" and create a file to store them.
+- companies_downloader_from_swissexchange.py: script downloading all companies by extracting data from the site ilsole24ore.it and "Borsa di Zurigo" and create a file to store them.
 - companies_downloader_from_londonstockexchange.py: script downloading all companies by extracting data from the site londonstockexchange.com and create a file to store them.
 - data_downloader_multithread.py: a script that downloads data from Yahoo Finance via the yfinance library (https://github.com/ranaroussi/yfinance), storing them in .csv files in the dataset folder and creating a convenience file containing the most useful information for each company;
 - analyzer.py: script that analyses the previously stored files, producing an analysis file in .csv and .xslx format as output
@@ -113,6 +113,10 @@ Francesco Miliani
 
 ## Version History
 
+0.6
+    * Add LSE London Stock Exchange companies downloaders
+    * See [commit change]() or See [release history]()
+    
 0.5
     * Add SIX Suiss Stock Exchange companies downloaders
     * See [commit change]() or See [release history]()
