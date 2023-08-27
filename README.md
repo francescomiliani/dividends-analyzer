@@ -10,7 +10,8 @@ The project essentially contains main scripts:
 - companies_downloader_from_borsaitaliana.py: script downloading all companies by extracting data from the site borsaitaliana.it and create a file to store them.
 - companies_downloader_from_milanofinanza.py: script downloading all companies by extracting data from the site milanofinanza.it and create a file to store them.
 - companies_downloader_from_sole24ore.py: script downloading all companies by extracting data from the site ilsole24ore.it and create a file to store them.
-  - companies_downloader_from_borseeuropee_zurigo.py: script downloading all companies by extracting data from the site ilsole24ore.it and "Borsa di Zurigo" and create a file to store them.
+- companies_downloader_from_borseeuropee_zurigo.py: script downloading all companies by extracting data from the site ilsole24ore.it and "Borsa di Zurigo" and create a file to store them.
+- companies_downloader_from_londonstockexchange.py: script downloading all companies by extracting data from the site londonstockexchange.com and create a file to store them.
 - data_downloader_multithread.py: a script that downloads data from Yahoo Finance via the yfinance library (https://github.com/ranaroussi/yfinance), storing them in .csv files in the dataset folder and creating a convenience file containing the most useful information for each company;
 - analyzer.py: script that analyses the previously stored files, producing an analysis file in .csv and .xslx format as output
 
