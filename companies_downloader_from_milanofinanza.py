@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import csv
 
 url = "https://www.milanofinanza.it/quotazioni/ricerca/aggregazione-238-mf-italy-azioni-ordinarie"
-filename = "companies.csv"
+filename = "companies_from_borsaitaliana.csv"
 
 response = requests.get(url)
 
