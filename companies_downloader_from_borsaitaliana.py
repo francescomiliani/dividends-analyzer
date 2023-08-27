@@ -4,7 +4,7 @@ import re
 import csv
 
 base_url = "https://www.borsaitaliana.it/borsa/azioni/all-share/lista.html?&page={}"
-filename = 'companies.csv'
+filename = 'companies_from_borsaitaliana.csv'
 
 def extract_isin(href):
     isin_match = re.search(r"/scheda/(\w+)\.html", href)
