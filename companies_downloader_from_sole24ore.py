@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 
 base_url = "https://mercati.ilsole24ore.com/azioni/borsa-italiana/ftse-all-share/{}"
-filename = "companies_from_ilsole24ore.csv"
+filename = "companies_from_borsaitaliana.csv"
 
 def scrape_page(url):
     response = requests.get(url)
