@@ -5,7 +5,7 @@ import csv
 import json
 
 base_url = "https://www.borsaitaliana.it/borsa/azioni/all-share/lista.html?&page={}"
-
+filename = 'companies_from_swissexchange.csv'
 def extract_isin(href):
     isin_match = re.search(r"/scheda/(\w+)\.html", href)
     return isin_match.group(1) if isin_match else None
@@ -44,7 +44,7 @@ while True:
         break
 
 if all_data:
-    with open("companies.csv", "w", newline="") as csvfile:
+    with open(filename, "w", newline="") as csvfile:
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(["Company", "Ticker"])  # Write header
         csvwriter.writerows(all_data)  # Write data rows
